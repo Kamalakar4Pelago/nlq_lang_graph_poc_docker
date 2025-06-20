@@ -7,7 +7,7 @@ import psycopg2
 from langchain_core.messages import ToolMessage, AnyMessage
 from langchain_core.tools import tool
 from pydantic.v1 import BaseModel, Field
-
+import os
 
 logging.basicConfig(level=logging.INFO)
 
@@ -21,15 +21,12 @@ def get_redshift_connection():
     """Get a connection to the Redshift database."""
     try:
         conn = psycopg2.connect(
-            host=(
-                'event-warehouse.c42h0lx7fues.'
-                'ap-southeast-1.redshift.amazonaws.com'
-            ),
-            port=5439,
-            user='ro',
-            password='TTU4PeqaC77zRsjb',
-            dbname='events'
-        )
+                    host=os.getenv("REDSHIFT_HOST"),
+                    port=int(os.getenv("REDSHIFT_PORT", 5439)),
+                    user=os.getenv("REDSHIFT_USER"),
+                    password=os.getenv("REDSHIFT_PASSWORD"),
+                    dbname=os.getenv("REDSHIFT_DBNAME")
+                )
         logging.info("Connected to Redshift")
         return conn
     except Exception as e:
