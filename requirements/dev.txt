@@ -1,0 +1,9 @@
+-r base.txt
+
+# Testing
+pytest
+
+# Formatting & Linting
+black
+flake8
+plotly
